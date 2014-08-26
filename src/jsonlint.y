@@ -10,31 +10,43 @@
 JSONString
     : STRING
         { // replace escaped characters with actual character
-          $$ = yytext.replace(/\\(\\|")/g, "$"+"1")
+          $$ = new String(yytext.replace(/\\(\\|")/g, "$"+"1")
                      .replace(/\\n/g,'\n')
                      .replace(/\\r/g,'\r')
                      .replace(/\\t/g,'\t')
                      .replace(/\\v/g,'\v')
                      .replace(/\\f/g,'\f')
-                     .replace(/\\b/g,'\b');
+                     .replace(/\\b/g,'\b'));
+          $$.__line__ =  @$.first_line;
         }
     ;
 
 JSONNumber
     : NUMBER
-        {$$ = Number(yytext);}
+        {
+            $$ = new Number(yytext);
+            $$.__line__ =  @$.first_line;
+        }
     ;
 
 JSONNullLiteral
     : NULL
-        {$$ = null;}
+        {
+            $$ = null;
+        }
     ;
 
 JSONBooleanLiteral
     : TRUE
-        {$$ = true;}
+        {
+            $$ = new Boolean(true);
+            $$.__line__ = @$.first_line;
+        }
     | FALSE
-        {$$ = false;}
+        {
+            $$ = new Boolean(false);
+            $$.__line__ = @$.first_line;
+        }
     ;
 
 JSONText

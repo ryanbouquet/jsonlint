@@ -2,32 +2,6 @@ var fs = require("fs"),
     assert = require("assert"),
     parser = require("../lib/jsonlint").parser;
 
-exports["test object"] = function () {
-    var json = '{"foo": "bar"}';
-    assert.deepEqual(parser.parse(json), {"foo": "bar"});
-};
-
-exports["test escaped backslash"] = function () {
-    var json = '{"foo": "\\\\"}';
-    assert.deepEqual(parser.parse(json), {"foo": "\\"});
-};
-
-exports["test escaped chars"] = function () {
-    var json = '{"foo": "\\\\\\\""}';
-    assert.deepEqual(parser.parse(json), {"foo": '\\\"'});
-};
-
-exports["test escaped \\n"] = function () {
-    var json = '{"foo": "\\\\\\n"}';
-    assert.deepEqual(parser.parse(json), {"foo": '\\\n'});
-};
-
-exports["test string with escaped line break"] = function () {
-    var json = '{"foo": "bar\\nbar"}';
-    assert.deepEqual(parser.parse(json), {"foo": "bar\nbar"});
-    assert.equal(JSON.stringify(parser.parse(json)).length, 18);
-};
-
 exports["test string with line break"] = function () {
     var json = '{"foo": "bar\nbar"}';
     assert["throws"](function () {parser.parse(json)}, "should throw error");
@@ -36,21 +10,24 @@ exports["test string with line break"] = function () {
 exports["test string literal"] = function () {
     var json = '"foo"';
     assert.equal(parser.parse(json), "foo");
+    assert.equal(parser.parse(json).__line__, 1);
 };
 
 exports["test number literal"] = function () {
     var json = '1234';
     assert.equal(parser.parse(json), 1234);
+    assert.equal(parser.parse(json).__line__, 1);
 };
 
 exports["test null literal"] = function () {
-    var json = '1234';
-    assert.equal(parser.parse(json), 1234);
+    var json = 'null';
+    assert.equal(parser.parse(json), null);
 };
 
 exports["test boolean literal"] = function () {
     var json = 'true';
     assert.equal(parser.parse(json), true);
+    assert.equal(parser.parse(json).__line__, 1);
 };
 
 exports["test unclosed array"] = function () {
@@ -228,5 +205,6 @@ exports["test pass-3"] = function () {
   assert.doesNotThrow(function () {parser.parse(json)}, "should pass");
 }
 
-if (require.main === module)
+if (require.main === module) {
     require("test").run(exports);
+}
