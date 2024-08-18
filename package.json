@@ -1,6 +1,6 @@
 {
   "author": "Zach Carter <zach@carter.name> (http://zaa.ch)",
-  "name": "@mapbox/jsonlint-lines-primitives",
+  "name": "@looker-forks/jsonlint-lines-primitives",
   "description": "Validate JSON",
   "keywords": [
     "json",
@@ -9,6 +9,7 @@
     "jsonlint"
   ],
   "version": "2.0.2",
+  "license": "MIT",
   "preferGlobal": true,
   "repository": {
     "type": "git",
